@@ -39,6 +39,7 @@ import java.text.ParseException;
  *
  */
 public class Main {
+	System.out.println("Hello, world");
 
 	static List<Table> table1ArrList = new ArrayList<Table>();
 
