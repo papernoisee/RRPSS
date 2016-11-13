@@ -2997,14 +2997,14 @@ public class Main {
 		try (FileWriter fw = new FileWriter("saleRevReport", false);
 				BufferedWriter bw = new BufferedWriter(fw);
 				PrintWriter out = new PrintWriter(bw)) {
-
+			
 
 			while (month < 13) {
 
 				for (int q = 0; q < orderArrList.size(); q++) {
 
 					if (orderArrList.get(q).getMonth() == month) {
-
+		
 						//getting menu item id and its qty in all orders
 
 						if (orderArrList.get(q).getMenuItemArr().size() != 0) {
@@ -3013,43 +3013,46 @@ public class Main {
 
 								menuItemArrTemp.add(orderArrList.get(q).getMenuItemArr().get(i));
 							}
+							while(menuItemArrTemp.size() != 0){
 
-							int qty = 0;
-							int menuItemId = menuItemArrTemp.get(0).getItemId();
-
-							if (menuItemArrTemp.size() == 1 && !idTemp.contains(menuItemId)) {
-								qty++;
-
-								// add id and qty into temp arr
-								idTemp.add(menuItemId);
-								qtyTemp.add(qty);
-
-								menuItemArrTemp.clear();
-							}
-
-							else {
-								for (int i = 0; i < menuItemArrTemp.size(); i++) {
-									// get qty of the specific itemId
-									if (menuItemArrTemp.get(i).getItemId() == menuItemId) {
-										menuItemArrTemp.remove(i);
-										qty++;
-										i--; // this ensures that the first element in temp will always have i = 0
-									}
-								}
-
-								// store id and qty in temp array list
-								if (!idTemp.contains(menuItemId)) {
+								int qty = 0;
+								int menuItemId = menuItemArrTemp.get(0).getItemId();
+	
+								if (menuItemArrTemp.size() == 1 && !idTemp.contains(menuItemId)) {
+									qty++;
+	
+									// add id and qty into temp arr
 									idTemp.add(menuItemId);
 									qtyTemp.add(qty);
-								} else {
-									int index = idTemp.indexOf(menuItemId);
-									int existingQty = qtyTemp.get(index);
-									existingQty += qty;
-									qtyTemp.set(index, existingQty);
+	
+									menuItemArrTemp.clear();
+								}
+	
+								else {
+									for (int i = 0; i < menuItemArrTemp.size(); i++) {
+										// get qty of the specific itemId
+										if (menuItemArrTemp.get(i).getItemId() == menuItemId) {
+											menuItemArrTemp.remove(i);
+											qty++;
+											i--; // this ensures that the first element in temp will always have i = 0
+										}
+									}
+	
+									// store id and qty in temp array list
+									if (!idTemp.contains(menuItemId)) {
+										idTemp.add(menuItemId);
+										qtyTemp.add(qty);
+									} 
+									else {
+										int index = idTemp.indexOf(menuItemId);
+										int existingQty = qtyTemp.get(index);
+										existingQty += qty;
+										qtyTemp.set(index, existingQty);
+									}
 								}
 							}
 						}
-
+						
 						//getting set package id and its qty in all orders
 
 						if (orderArrList.get(q).getSetPackageArr().size() != 0) {
@@ -3057,6 +3060,8 @@ public class Main {
 							for (int i = 0; i < orderArrList.get(q).getSetPackageArr().size(); i++) {								
 								setPackageArrTemp.add(orderArrList.get(q).getSetPackageArr().get(i));
 							}
+							
+							while(setPackageArrTemp.size() != 0){
 							int qty = 0;
 							int setPackId = setPackageArrTemp.get(0).getSetPackId();
 
@@ -3081,48 +3086,52 @@ public class Main {
 								}
 
 								if (!idTemp2.contains(setPackId)) {
-									idTemp2.add(setPackId);
-									qtyTemp2.add(qty);
-								} else {
-									int index = idTemp2.indexOf(setPackId);
-									int existingQty = qtyTemp2.get(index);
-									existingQty += qty;
-									qtyTemp2.set(index, existingQty);
+										idTemp2.add(setPackId);
+										qtyTemp2.add(qty);
+								} 
+								else {
+										int index = idTemp2.indexOf(setPackId);
+										int existingQty = qtyTemp2.get(index);
+										existingQty += qty;
+										qtyTemp2.set(index, existingQty);
+									}
 								}
 							}
 						}
 					}
 				}
-
+				
 				if(idTemp.size() != 0 || idTemp2.size() != 0){
-
+					
 					out.print(month + "|");
-
+					
 					// write menu items with its qty
 					out.print("alacarte|");
-
+	
 					for (int n = 0; n < idTemp.size(); n++) {
 						out.print(idTemp.get(n) + "|");
 						out.print(qtyTemp.get(n) + "|");
 					}
-
+	
 					out.print("promotional|");
-
+	
 					for (int n = 0; n < idTemp2.size(); n++) {
 						out.print(idTemp2.get(n) + "|");
 						out.print(qtyTemp2.get(n) + "|");
-
+						
+						
 					}
-
+					
+					
 					out.println();
-
+					
 					//clear arraylist to store details of the following month	
 					idTemp.clear();
 					qtyTemp.clear();
 					idTemp2.clear();
 					qtyTemp2.clear();
 				}
-
+				
 				month++;	
 			}
 			out.close();
